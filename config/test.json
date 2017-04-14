@@ -1,0 +1,3 @@
+{
+    "DBHOST": "mongodb://dbtest2:test1234@ds161580.mlab.com:61580/libelula_test"
+}

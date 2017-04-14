@@ -1,0 +1,30 @@
+{
+  "name": "blog-api-nodejs",
+  "version": "1.0.0",
+  "description": "Blog API application using NodeJS",
+  "main": "app.js",
+  "author": "Jonathan Freites",
+  "license": "ISC",
+  "keywords": [
+    "blog",
+    "api",
+    "nodejs",
+    "express",
+    "backend"
+  ],
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "config": "^1.25.1",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha --timeout 10000"
+  }
+}
