@@ -74,6 +74,7 @@ describe('/POST post', () => {
         }
         chai.request(app)
             .post('/api/posts')
+            .set('token', 'my-super-secure-auth-token')
             .send(post)
             .end((err, res) => {
                 res.should.have.status(200);
@@ -93,6 +94,7 @@ describe('/POST post', () => {
         }
         chai.request(app)
             .post('/api/posts')
+            .set('token', 'my-super-secure-auth-token')
             .send(post)
             .end((err, res) => {
                 res.should.have.status(200);
