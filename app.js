@@ -15,7 +15,7 @@ mongoose.connect(config.DBHOST);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-    console.log('we are connected with mlab.com...');
+    console.log('We are connected to mlab.com...');
 });
 
 // Parse app
@@ -26,7 +26,7 @@ app.use(bodyParser.json({ type: 'application/json'}));
 
 // Root path
 app.get('/', (req, res) => res.json(
-        {message: "Check documentation for availables endpoints for testing."}
+        {message: "Check documentation for availables endpoints."}
     )
 );
 
@@ -50,15 +50,21 @@ app.get('/api/posts/:_id', (req, res) => {
 });
 
 app.post('/api/posts', (req, res) => {
-    Post.createPost(req.body, (err, post) => {
-        if (err) {
-            res.send(err);
-        } else {
-            res.json({ message: "Post succesfully created", post });
-        }
-    });
+    if (req.headers.token === "my-super-secure-auth-token") {
+        Post.createPost(req.body, (err, post) => {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json({ message: "Post succesfully created", post });
+            }
+        });
+    } else {
+        res.json({ message: "Forbidden action"});
+    }
 });
 
-app.listen(port);
-console.log("Listening on port " + port);
+app.listen(port, () => {
+    console.log("Express server listening on port " + port);
+});
+
 module.exports = app; // for testing
