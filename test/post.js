@@ -12,12 +12,30 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 // Before each test empty the mongo database
-describe('Posts', () => {
-    beforeEach( (done) => {
-        Post.remove({}, (err) => {
-            done();
+// http://stackoverflow.com/questions/18335017/drop-mongodb-database-before-running-mocha-test
+beforeEach(function (done) {
+
+    function clearDB() {
+        var promises = [
+            Post.remove().exec()
+        ];
+
+        Promise.all(promises)
+            .then(function () {
+                done();
+            })
+    }
+
+    if (mongoose.connection.readyState === 0) {
+        mongoose.connect(config.DBHOST, function (err) {
+            if (err) {
+                throw err;
+            }
+            return clearDB();
         });
-    });
+    } else {
+        return clearDB();
+    }
 });
 
 /*
@@ -30,7 +48,7 @@ describe('/GET posts', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
-                //res.body.length.should.be.eql(0);
+                res.body.length.should.be.eql(0);
                 done();
             });
     });

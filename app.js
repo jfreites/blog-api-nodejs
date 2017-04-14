@@ -34,7 +34,7 @@ app.get('/', (req, res) => res.json(
 app.get('/api/posts', (req, res) => {
     Post.getPosts( (err, posts) => {
         if (err) {
-            res.send('ERROR: ' + err.message);
+            res.send(err);
         }
         res.json(posts);
     }, 10);
@@ -43,7 +43,7 @@ app.get('/api/posts', (req, res) => {
 app.get('/api/posts/:_id', (req, res) => {
     Post.getPostById(req.params._id, (err, post) => {
         if (err) {
-            res.send('ERROR: ' + err.message);
+            res.send(err);
         }
         res.json(post);
     });
