@@ -1,6 +1,7 @@
 let express = require('express');
 let app = express();
 let mongoose = require('mongoose');
+mongoose.Promise = require('bluebird')
 let bodyParser = require('body-parser');
 let config = require('config');
 let port = 8080;
@@ -13,7 +14,7 @@ let Post = require('./models/post');
 mongoose.connect(config.DBHOST);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
+db.once('open', () => {
     console.log('we are connected with mlab.com...');
 });
 
@@ -52,8 +53,9 @@ app.post('/api/posts', (req, res) => {
     Post.createPost(req.body, (err, post) => {
         if (err) {
             res.send(err);
+        } else {
+            res.json({ message: "Post succesfully created", post });
         }
-        res.json({ message: "Post succesfully created", post });
     });
 });
 
