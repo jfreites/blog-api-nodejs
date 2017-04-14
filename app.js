@@ -49,22 +49,17 @@ app.get('/api/posts/:_id', (req, res) => {
     });
 });
 
+// Validating authorization Token on POST request
+app.post('/api/posts', [require('./middlewares/validateToken')]);
+
 app.post('/api/posts', (req, res) => {
-    if (req.headers.token) {
-        if (req.headers.token === "my-super-secure-auth-token") {
-            Post.createPost(req.body, (err, post) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json({ message: "Post succesfully created", post });
-                }
-            });
+    Post.createPost(req.body, (err, post) => {
+        if (err) {
+            res.send(err);
         } else {
-            res.status(401).json({ message: "Invalid Token"});
+            res.json({ message: "Post succesfully created", post });
         }
-    } else {
-        res.status(403).json({ message: "Not authorized"});
-    }
+    });
 });
 
 app.listen(port, () => {

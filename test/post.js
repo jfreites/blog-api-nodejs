@@ -104,6 +104,23 @@ describe('/POST post', () => {
             });
     });
 
+    it('it should not POST a blog-post without a valid token', (done) => {
+        let post = {
+            title: "Hello world example",
+            authorId: "1",
+            body: "This is essentially going to be the simplest Express app you can create"
+        }
+        chai.request(app)
+            .post('/api/posts')
+            .send(post)
+            .end((err, res) => {
+                res.should.have.status(403);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message').eql('Not Authorized');
+                done();
+            });
+    });
+
     it('it should POST a blog-post', (done) => {
         let post = {
             title: "Hello world example",
