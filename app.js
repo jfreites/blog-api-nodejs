@@ -1,13 +1,14 @@
 let express = require('express');
-let app = express();
-let mongoose = require('mongoose');
-mongoose.Promise = require('bluebird')
 let bodyParser = require('body-parser');
 let config = require('config');
+let mongoose = require('mongoose');
+mongoose.Promise = require('bluebird')
+
+let app = express();
 let port = 8080;
 
-// Include Models
-let Post = require('./models/post');
+// Include Controllers
+let posts = require('./controllers/posts');
 
 // Connection to mongodb
 //mongoose.connect('mongodb://localhost/blog'); for offline testing purpose
@@ -24,44 +25,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: 'application/json'}));
 
-// Root path
-app.get('/', (req, res) => res.json(
-        {message: "Check documentation for availables endpoints."}
-    )
-);
+// Routes
+app.use(posts);
 
-// Endpoints
-app.get('/api/posts', (req, res) => {
-    Post.getPosts( (err, posts) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json(posts);
-    }, 10);
-});
-
-app.get('/api/posts/:_id', (req, res) => {
-    Post.getPostById(req.params._id, (err, post) => {
-        if (err) {
-            res.send(err);
-        }
-        res.json(post);
-    });
-});
-
-// Validating authorization Token on POST request
-app.post('/api/posts', [require('./middlewares/validateToken')]);
-
-app.post('/api/posts', (req, res) => {
-    Post.createPost(req.body, (err, post) => {
-        if (err) {
-            res.send(err);
-        } else {
-            res.json({ message: "Post succesfully created", post });
-        }
-    });
-});
-
+// Run app on port {port}
 app.listen(port, () => {
     console.log("Express server listening on port " + port);
 });

@@ -35,6 +35,4 @@ module.exports.getPostById = (postId, callback) => {
 // Create a Post
 module.exports.createPost = (post, callback) => {
     Post.create(post, callback);
-    //let newPost = new Post(post);
-    //newPost.save(callback);
 }
